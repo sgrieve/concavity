@@ -97,4 +97,4 @@ So there will be a directory structure as follows:
 
 and the `csv` files will have the following headers:
 
-`X`,`Y`,`Latitude`,`Longitude`,`Elevation`,`Flow_Distance`, `Drainage_Area`, `Source_Key`, `Basin_key`
+`X`, `Y`, `Latitude`, `Longitude`, `Elevation`, `Flow_Distance`, `Drainage_Area`, `Source_Key`, `Basin_key`
