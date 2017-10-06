@@ -78,6 +78,23 @@ It is possible that even on the Legion Supercomputer we may come up against memo
 
 ## Outcomes
 
-The result of this project will be a series of `csv` files containing the following information, sampled on a per-pixel basis
+The result of this project will be a series of `csv` files sampled on a per-pixel basis for each river in each climate zone identified in the Koppen dataset, ready to be processed by the a modified version of the existing Matlab processing script.
 
-ready to be processed by the a modified version of the existing matlab processing script.
+So there will be a directory structure as follows:
+
+```
++-- zone_Af/
+|   +-- af_river_1.csv
+|   +-- af_river_2.csv
+|   +-- af_river_3.csv
+|   +-- af_river_4.csv
++-- zone_BSk/
+|   +-- BSk_river_1.csv
+|   +-- BSk_river_2.csv
+|   +-- BSk_river_3.csv
+|   +-- BSk_river_4.csv
+```
+
+and the `csv` files will have the following headers:
+
+`X`,`Y`,`Latitude`,`Longitude`,`Elevation`,`Flow_Distance`, `Drainage_Area`, `Source_Key`, `Basin_key`
