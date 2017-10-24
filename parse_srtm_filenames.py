@@ -1,5 +1,9 @@
+import json
+
 with open('srtm_filenames.lst', 'r') as f:
     srtm = f.readlines()
+
+results = {}
 
 for s in srtm:
     short = s.split('/')[-1].split('.')[0]
@@ -22,4 +26,7 @@ for s in srtm:
     p3 = (left + 1, right + 1)
     p4 = (left, right + 1)
 
-    final = (p1, p2, p3, p4)
+    results[s.strip()] = (p1, p2, p3, p4)
+
+with open('srtm_coords.json', 'w') as f:
+    json.dump(results, f, sort_keys=True, indent=4)
