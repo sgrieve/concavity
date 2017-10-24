@@ -1,5 +1,6 @@
 import fiona
 import os
+import json
 
 path = '/Users/stuart/CardiffProject/climate_zones/singlepart_files/'
 
@@ -37,4 +38,5 @@ for f in os.listdir(path):
 
         results[f] = output
 
-print(results)
+with open('bboxes.json', 'w') as f:
+    json.dump(results, f, sort_keys=True, indent=4)
