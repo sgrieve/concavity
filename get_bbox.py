@@ -1,6 +1,7 @@
 import fiona
 import os
 import json
+import utm
 
 path = '/Users/stuart/CardiffProject/climate_zones/singlepart_files/'
 
@@ -23,9 +24,19 @@ for f in os.listdir(path):
         maxlong = max(longs)
         minlong = min(longs)
 
+        # Compute the utm zone for the lower left corner of the bbox
+        utm_zone = utm.from_latlon(minlat, minlong)
+
+        # Convert latitude band into N or S
+        if ord(utm_zone[3]) >= 78:
+            utm_letter = 'N'
+        elif ord(utm_zone[3]) < 78:
+            utm_letter = 'S'
+
         output = {'bbox': [maxlat, minlat, maxlong, minlong],
                   'south_max': False, 'south_min': False,
-                  'west_max': False, 'west_min': False}
+                  'west_max': False, 'west_min': False,
+                  'utm_zone': [utm_zone[2], utm_letter]}
 
         if maxlat < 0:
             output['south_max'] = True
