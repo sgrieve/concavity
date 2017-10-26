@@ -29,9 +29,9 @@ for f in os.listdir(path):
 
         # Convert latitude band into N or S
         if ord(utm_zone[3]) >= 78:
-            utm_letter = 'N'
+            utm_letter = 'north'
         elif ord(utm_zone[3]) < 78:
-            utm_letter = 'S'
+            utm_letter = 'south'
 
         output = {'bbox': [maxlat, minlat, maxlong, minlong],
                   'south_max': False, 'south_min': False,
