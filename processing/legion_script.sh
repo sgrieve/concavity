@@ -33,4 +33,4 @@ module load gdal
 cd $TMPDIR
 
 # 8. Run the application.
-sh /home/ccearie/srtm_code/runner.sh 11_21 48 north
+sh /home/ccearie/concavity/processing/runner.sh 11_21 48 north
