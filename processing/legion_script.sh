@@ -2,6 +2,12 @@
 # Batch script to run a serial job on Legion with the upgraded
 # software stack under SGE.
 
+module load python
+module load perl
+module load hdf/5-1.8.15/gnu-4.9.2
+module load netcdf/4.3.3.1/gnu-4.9.2
+module load gdal
+
 # 1. Force bash as the executing shell.
 #$ -S /bin/bash
 
@@ -21,10 +27,10 @@
 # a necessary step with the upgraded software stack as compute nodes cannot
 # write to $HOME.
 # Replace "<your_UCL_id>" with your UCL user ID :)
-#$ -wd /home/ccearie/Scratch/LSD_output
+#$ -wd /home/ccearie/Scratch/SRTM
 
 # 7. Your work *must* be done in $TMPDIR
 cd $TMPDIR
 
 # 8. Run the application.
-/home/ccearie/LSD/LSDTopoTools_ChiMudd2014-master/driver_functions_MuddChi2014/chi_mapping_tool.exe  /home/ccearie/drivers/ Example_ChiTool.driver
+sh /home/ccearie/srtm_code/runner.sh 11_21 48 north
