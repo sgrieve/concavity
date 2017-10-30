@@ -6,25 +6,16 @@ import matplotlib.pyplot as plt
 offset_elevs = []
 median_norm_offsets = []
 
-n = len(sys.argv[1:])
+output_filename = sys.argv[1]
 
-filelist = ['/Users/stuart/CardiffProject/postprocessing/11_21_river_6.csv',
-            '/Users/stuart/CardiffProject/postprocessing/11_21_river_647.csv',
-            '/Users/stuart/CardiffProject/postprocessing/11_21_river_7.csv',
-            '/Users/stuart/CardiffProject/postprocessing/11_21_river_519.csv',
-            '/Users/stuart/CardiffProject/postprocessing/11_21_river_113.csv',
-            '/Users/stuart/CardiffProject/postprocessing/11_21_river_1076.csv',
-            '/Users/stuart/CardiffProject/postprocessing/11_21_river_1532.csv']
+n = len(sys.argv[2:])
 
-n = 7
-
-# for filename in sys.argv[1:]:
-for filename in filelist:
+for filename in sys.argv[1:]:
 
     data = np.genfromtxt(filename, delimiter=',')
 
-    A = data[:, 4]
-    B = data[:, 5]
+    A = data[:, 5]
+    B = data[:, 4]
 
     R = np.nanmax(B) - np.nanmin(B)
 
@@ -39,7 +30,6 @@ for filename in filelist:
 
     Y = m * A + b  # Y values on the line
     offset_elev = (B - Y) / R
-    print(offset_elev)
     offset_elevs.append(offset_elev)
 
     median_norm_offsets.append(np.nanmedian(offset_elev))
@@ -55,4 +45,4 @@ plt.xlabel('River')
 plt.ylabel('Normalised concavity index')
 plt.xlim(0.5, n + 0.5)
 plt.ylim(-1, 0.5)
-plt.savefig('test.png')
+plt.savefig('{}.png'.format(output_filename))
