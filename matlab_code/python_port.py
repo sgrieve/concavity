@@ -3,8 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-A = np.genfromtxt('d.txt', delimiter='\t')
-B = np.genfromtxt('e.txt', delimiter='\t')
+A = np.genfromtxt('Af_distance.txt', delimiter='\t')
+B = np.genfromtxt('Af_elevation.txt', delimiter='\t')
 
 m, n = A.shape
 
