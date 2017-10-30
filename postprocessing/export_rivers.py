@@ -1,8 +1,9 @@
 import csv
 import os
+import sys
 from collections import Counter
 
-input_file = '../TMPDIR/11_21_output_MChiSegmented.csv'
+input_file = sys.argv[1]
 filename = os.path.basename(input_file)
 split_name = filename.split('_')
 
