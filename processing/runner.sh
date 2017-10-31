@@ -10,7 +10,7 @@ mkdir $1
 cd $1
 
 # Download the tiles we need
-python /home/ccearie/concavity/processing/get_urls.py $1.shp | xargs wget -q
+python /home/ccearie/concavity/processing/get_urls.py $1.shp | xargs wget -nv
 
 # Build virtual raster from tiles
 gdalbuildvrt input.vrt *.hgt
