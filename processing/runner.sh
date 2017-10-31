@@ -27,7 +27,7 @@ rm *.hgt
 rm *.vrt
 
 # Run the LSD code (on legion)
-/home/ccearie/LSD/LSDTopoTools_ChiMudd2014-master/driver_functions_MuddChi2014/chi_mapping_tool.exe  /home/ccearie/concavity/processing/ SRTM.driver /home/ccearie/Scratch/SRTM/$1 $1 /home/ccearie/Scratch/SRTM/$1 $1
+/home/ccearie/LSD/LSDTopoTools_ChiMudd2014-master/driver_functions_MuddChi2014/chi_mapping_tool.exe /home/ccearie/concavity/processing/ SRTM.driver /home/ccearie/Scratch/SRTM/$1/ $1 /home/ccearie/Scratch/SRTM/$1/ $1
 
 # Extract the rivers from the output data
 python /home/ccearie/concavity/postprocessing/export_rivers.py $1_MChiSegmented.csv
