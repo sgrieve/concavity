@@ -15,9 +15,9 @@ min_slope_for_fill: 0.0001
 
 # Parameters for selecting channels and basins
 
-threshold_contributing_pixels: 1000
-minimum_basin_size_pixels: 1000
-test_drainage_boundaries: false
+threshold_contributing_pixels: 50000
+minimum_basin_size_pixels: 100000
+test_drainage_boundaries: true
 
 # Parameters for chi analysis
 A_0: 1000
