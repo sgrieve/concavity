@@ -8,6 +8,7 @@ B = np.genfromtxt('Af_elevation.txt', delimiter='\t')
 
 m, n = A.shape
 
+# Creating nan arrays in numpy is a bit messy
 offset_norm_elev = np.empty((m, n))
 offset_norm_elev[:] = np.NAN
 median_norm_offset = np.empty((m, n))
@@ -29,6 +30,7 @@ for i in range(0, n):
     x = [x1, x2]
     y = [y1, y2]
 
+    # Equivalent to the regression() function in Matlab
     result = stats.linregress(x, y)
 
     m = result[0]
@@ -39,6 +41,7 @@ for i in range(0, n):
     offset_norm_elev[:, i] = offset_elev
     median_norm_offset[i] = np.nanmedian(offset_elev)
 
+    # In Matlab nans are omitted by default, in scipy we have to specify it
     iqr_norm_offset[i] = stats.iqr(offset_elev, nan_policy='omit')
 
 
