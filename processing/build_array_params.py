@@ -13,12 +13,12 @@ with open('download_links.json') as srtm:
 with open('bboxes.json') as bbox:
     bboxes = json.load(bbox)
 
+# Count the number of files to download for each sub zone
 counts = []
 for key, urls in links.items():
     if len(urls) > 0:
         counts.append((key, len(urls)))
 
-# Count the number of files to download for each sub zone
 counts.sort(key=lambda tup: tup[1], reverse=True)
 
 # Filter the data by the input args
