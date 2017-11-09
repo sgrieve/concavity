@@ -163,7 +163,8 @@ def runner():
                 '7_18', '1_74', '8_48', '11_10', '5_1', '11_12', '3_48',
                 '4_20']
 
-    for cz in to_split:
+    for i, cz in enumerate(to_split, start=1):
+        print(i, 'of', len(to_split), 'processed')
         path = ('/Users/stuart/CardiffProject/climate_zones'
                 '/singlepart_files_split/{}.shp').format(cz)
 
@@ -173,4 +174,6 @@ def runner():
         path = path[:-3]
         to_delete = ['shp', 'dbf', 'shx', 'cpg']
         for d in to_delete:
-            os.remove(path + 'd')
+            os.remove(path + d)
+
+runner()
