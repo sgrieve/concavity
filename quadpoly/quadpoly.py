@@ -4,6 +4,7 @@ from functools import partial
 from uuid import uuid4
 import pyproj
 import fiona
+import os
 
 
 def load_poly(path):
@@ -33,7 +34,7 @@ def write_shapefile(out_filename, geometry, zone_id):
     with fiona.open(out_filename, 'w', 'ESRI Shapefile', schema) as c:
         c.write({
             'geometry': mapping(geometry),
-            'properties': {'cz': zone_id},
+            'properties': {'cz': zone_id.split('_')[0]},
         })
 
 
@@ -66,7 +67,17 @@ def bbox_area(poly):
     return dirty_area(Polygon(coords))
 
 
-def divide_poly(poly):
+def get_cz_id(filename):
+    '''
+    Return the cz id and sub id as a string in the format 'czID_subID'
+    '''
+    return os.path.splitext(os.path.basename(filename))[0]
+
+
+def divide_poly(poly, cz_id):
+    '''
+    Recursive method to divide a polygon by quartering its bounding box.
+    '''
 
     # Early exit if the polygon is small enough already
     if bbox_area(poly) < 725000000000:
@@ -75,11 +86,11 @@ def divide_poly(poly):
     # (minx, miny, maxx, maxy)
     bounds = poly.bounds
 
+    # Calculate dimensions of a quarter of the bbox
     xwid = (bounds[2] - bounds[0]) / 2
     ywid = (bounds[3] - bounds[1]) / 2
 
-    four_quarters = []
-
+    # Generate the coordinates for each of the quarters
     bl = [(bounds[0], bounds[1]),
           (bounds[0], bounds[1] + ywid),
           (bounds[0] + xwid, bounds[1] + ywid),
@@ -118,23 +129,25 @@ def divide_poly(poly):
 
                     if bbox_area(geom) < 725000000000:
                         # Write a new Shapefile if we have not made a sliver
-                        if dirty_area(geom) > 3000000000:
-                            write_shapefile('{}.shp'.format(uuid4()), geom, 11)
+                        if dirty_area(geom) > 1000000000:
+                            write_shapefile('{}_{}.shp'.format(cz_id, uuid4()),
+                                            geom, cz_id)
                     else:
                         # Recurse as the polygon is still too big
-                        divide_poly(geom)
+                        divide_poly(geom, cz_id)
 
         elif clipped.type is 'Polygon':
             if bbox_area(clipped) < 725000000000:
                 # Write a new Shapefile if we have not made a sliver
-                if dirty_area(clipped) > 3000000000:
-                    write_shapefile('{}.shp'.format(uuid4()), clipped, 11)
+                if dirty_area(clipped) > 1000000000:
+                    write_shapefile('{}_{}.shp'.format(cz_id, uuid4()),
+                                    clipped, cz_id)
             else:
                 # Recurse as the polygon is still too big
-                divide_poly(clipped)
+                divide_poly(clipped, cz_id)
 
         else:
             print('Odd geometry:', clipped.type)
 
 path = '/Users/stuart/CardiffProject/climate_zones/singlepart_files/11_13.shp'
-divide_poly(load_poly(path))
+divide_poly(load_poly(path), get_cz_id(path))
