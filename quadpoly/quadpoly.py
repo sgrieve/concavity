@@ -14,13 +14,23 @@ def load_poly(path):
     return Polygon(geoms[0], holes=geoms[1:])
 
 
-def divide_poly(poly):
+def write_shapefile(out_filename, geometry, zone_id):
 
     # Define a polygon feature geometry with one attribute
     schema = {
         'geometry': 'Polygon',
         'properties': {'cz': 'int'},
     }
+
+    # write the shapefile using the schema
+    with fiona.open(out_filename, 'w', 'ESRI Shapefile', schema) as c:
+        c.write({
+            'geometry': mapping(geometry),
+            'properties': {'cz': zone_id},
+        })
+
+
+def divide_poly(poly):
 
     # Convert the poly to equal area coords so we can get its approx area
     # this is an approximation, and will not equal the utm areas for the
@@ -71,28 +81,20 @@ def divide_poly(poly):
         clipped = clipper.intersection(poly)
 
         # If there are more than one polygons in an intersection output it is
-        # stored as a MultiPolygon, if there are lines and polys as a result of an
-        # intersection it is stored as a GeometryCollection.
+        # stored as a MultiPolygon, if there are lines and polys as a result of
+        # an intersection it is stored as a GeometryCollection.
         # Otherwise it is just a polygon.
         # Need to decide on a naming scheme that will not overwrite any files.
         if clipped.type is 'GeometryCollection' or clipped.type is 'MultiPolygon':
 
             for i, geom in enumerate(clipped):
                 if geom.type is 'Polygon':
-
                     # Write a new Shapefile
-                    with fiona.open('11_{}_{}.shp'.format(j, i), 'w', 'ESRI Shapefile', schema) as c:
-                        c.write({
-                            'geometry': mapping(geom),
-                            'properties': {'cz': 11},
-                        })
+                    write_shapefile('11_{}_{}.shp'.format(j, i), geom, 11)
+
         elif clipped.type is 'Polygon':
             # Write a new Shapefile
-            with fiona.open('11_{}_0.shp'.format(j), 'w', 'ESRI Shapefile', schema) as c:
-                c.write({
-                    'geometry': mapping(clipped),
-                    'properties': {'cz': 11},
-                })
+            write_shapefile('11_{}_0.shp'.format(j), clipped, 11)
 
         else:
             print('Odd geometry:', clipped.type)
