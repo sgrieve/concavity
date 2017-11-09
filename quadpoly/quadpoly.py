@@ -30,19 +30,25 @@ def write_shapefile(out_filename, geometry, zone_id):
         })
 
 
-def divide_poly(poly):
-
-    # Convert the poly to equal area coords so we can get its approx area
-    # this is an approximation, and will not equal the utm areas for the
-    # properly converted polygons.
+def dirty_area(poly):
+    '''
+    Convert the poly to equal area coords so we can get its approx area
+    this is an approximation, and will not equal the utm areas for the
+    properly converted polygons.
+    '''
     poly_equal = transform(partial(pyproj.transform,
                                    pyproj.Proj(init='EPSG:4326'),
                                    pyproj.Proj(proj='aea',
                                                lat1=poly.bounds[1],
                                                lat2=poly.bounds[3])), poly)
 
+    return poly_equal.area
+
+
+def divide_poly(poly):
+
     # Early exit if the polygon is small enough already
-    if poly_equal.area < 725000:
+    if dirty_area(poly) < 725000:
         return
 
     # (minx, miny, maxx, maxy)
@@ -89,6 +95,7 @@ def divide_poly(poly):
 
             for i, geom in enumerate(clipped):
                 if geom.type is 'Polygon':
+
                     # Write a new Shapefile
                     write_shapefile('11_{}_{}.shp'.format(j, i), geom, 11)
 
