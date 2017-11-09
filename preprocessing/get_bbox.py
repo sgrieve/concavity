@@ -3,7 +3,7 @@ import os
 import json
 import utm
 
-path = '/Users/stuart/CardiffProject/climate_zones/singlepart_files/'
+path = '/Users/stuart/CardiffProject/climate_zones/singlepart_files_split/'
 
 results = {}
 for f in os.listdir(path):
@@ -49,5 +49,5 @@ for f in os.listdir(path):
 
         results[f] = output
 
-with open('bboxes.json', 'w') as f:
+with open('../processing/bboxes.json', 'w') as f:
     json.dump(results, f, sort_keys=True, indent=4)

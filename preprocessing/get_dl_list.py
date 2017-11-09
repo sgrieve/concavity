@@ -18,7 +18,7 @@ base_url = 'https://cloud.sdsc.edu/v1/AUTH_opentopography/Raster/SRTM_GL1/'
 with open('srtm_coords.json') as srtm:
     srtm_data = json.load(srtm)
 
-with open('bboxes.json') as cz:
+with open('../processing/bboxes.json') as cz:
     cz_coords = json.load(cz)
 
 no_of_cz = len(cz_coords) - 1
@@ -35,5 +35,5 @@ for i, (cz_filename, cz_data) in enumerate(cz_coords.items()):
     results[cz_filename] = tmp_results
 
 
-with open('download_links.json', 'w') as f:
+with open('../processing/download_links.json', 'w') as f:
     json.dump(results, f, sort_keys=True, indent=4)
