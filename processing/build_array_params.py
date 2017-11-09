@@ -24,9 +24,10 @@ counts.sort(key=lambda tup: tup[1], reverse=True)
 # Filter the data by the input args
 to_process = [x for x in counts if x[1] > lower and x[1] <= upper]
 
-# Write the required params for each job into a file
+# Write the required params for each job into a file in the format:
+# job_id shapefile_name(no extension) utm_zone north/south no-of-tiles
 with open('array_params_{}_{}.txt'.format(lower, upper), 'w') as f:
     for i, a in enumerate(to_process):
         utm = bboxes[a[0]]['utm_zone']
-        f.write('{} {} {} {}\n'.format(str(i).zfill(4),
-                                       a[0][:-4], utm[0], utm[1]))
+        f.write('{} {} {} {} {}\n'.format(str(i).zfill(4), a[0][:-4], utm[0],
+                                          utm[1], a[1]))
