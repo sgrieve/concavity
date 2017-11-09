@@ -122,7 +122,8 @@ def divide_poly(poly, cz_id):
         # stored as a MultiPolygon, if there are lines and polys as a result of
         # an intersection it is stored as a GeometryCollection.
         # Otherwise it is just a polygon.
-        if clipped.type is 'GeometryCollection' or clipped.type is 'MultiPolygon':
+        types = ['GeometryCollection', 'MultiPolygon']
+        if clipped.type is types[0] or clipped.type is types[1]:
 
             for i, geom in enumerate(clipped):
                 if geom.type is 'Polygon':
