@@ -5,10 +5,12 @@ from uuid import uuid4
 import pyproj
 import fiona
 
-path = '/Users/stuart/CardiffProject/climate_zones/singlepart_files/11_13.shp'
-
 
 def load_poly(path):
+    '''
+    From a path to a shapefile, load the geometry and return it as a shapely
+    polygon object. Will do strange things if given non polygon input data.
+    '''
     with fiona.open(path) as shp:
         geoms = (shp[0]['geometry']['coordinates'])
 
@@ -16,6 +18,10 @@ def load_poly(path):
 
 
 def write_shapefile(out_filename, geometry, zone_id):
+    '''
+    Wrapper around fiona's shapefile writer to standardise the attributes
+    across files being written
+    '''
 
     # Define a polygon feature geometry with one attribute
     schema = {
@@ -35,7 +41,7 @@ def dirty_area(poly):
     '''
     Convert the poly to equal area coords so we can get its approx area
     this is an approximation, and will not equal the utm areas for the
-    properly converted polygons.
+    properly converted polygons. Returns area in m^2
     '''
     poly_equal = transform(partial(pyproj.transform,
                                    pyproj.Proj(init='EPSG:4326'),
@@ -46,10 +52,24 @@ def dirty_area(poly):
     return poly_equal.area
 
 
+def bbox_area(poly):
+    '''
+    Return the area in m^2 of the bounding box of a given polygon
+    '''
+    bounds = poly.bounds
+
+    coords = [(bounds[0], bounds[1]),
+              (bounds[0], bounds[3]),
+              (bounds[2], bounds[3]),
+              (bounds[2], bounds[1])]
+
+    return dirty_area(Polygon(coords))
+
+
 def divide_poly(poly):
 
     # Early exit if the polygon is small enough already
-    if dirty_area(poly) < 725000000000:
+    if bbox_area(poly) < 725000000000:
         return
 
     # (minx, miny, maxx, maxy)
@@ -97,17 +117,19 @@ def divide_poly(poly):
             for i, geom in enumerate(clipped):
                 if geom.type is 'Polygon':
 
-                    if dirty_area(geom) < 725000000000:
-                        # Write a new Shapefile
-                        write_shapefile('{}.shp'.format(uuid4()), geom, 11)
+                    if bbox_area(geom) < 725000000000:
+                        # Write a new Shapefile if we have not made a sliver
+                        if dirty_area(geom) > 3000000000:
+                            write_shapefile('{}.shp'.format(uuid4()), geom, 11)
                     else:
                         # Recurse as the polygon is still too big
                         divide_poly(geom)
 
         elif clipped.type is 'Polygon':
-            if dirty_area(clipped) < 725000000000:
-                # Write a new Shapefile
-                write_shapefile('{}.shp'.format(uuid4()), clipped, 11)
+            if bbox_area(clipped) < 725000000000:
+                # Write a new Shapefile if we have not made a sliver
+                if dirty_area(clipped) > 3000000000:
+                    write_shapefile('{}.shp'.format(uuid4()), clipped, 11)
             else:
                 # Recurse as the polygon is still too big
                 divide_poly(clipped)
@@ -115,4 +137,5 @@ def divide_poly(poly):
         else:
             print('Odd geometry:', clipped.type)
 
+path = '/Users/stuart/CardiffProject/climate_zones/singlepart_files/11_13.shp'
 divide_poly(load_poly(path))
