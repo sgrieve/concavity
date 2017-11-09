@@ -1,6 +1,7 @@
 from shapely.geometry import mapping, Polygon
 from shapely.ops import transform
 from functools import partial
+from uuid import uuid4
 import pyproj
 import fiona
 
@@ -48,7 +49,7 @@ def dirty_area(poly):
 def divide_poly(poly):
 
     # Early exit if the polygon is small enough already
-    if dirty_area(poly) < 725000:
+    if dirty_area(poly) < 725000000000:
         return
 
     # (minx, miny, maxx, maxy)
@@ -96,12 +97,20 @@ def divide_poly(poly):
             for i, geom in enumerate(clipped):
                 if geom.type is 'Polygon':
 
-                    # Write a new Shapefile
-                    write_shapefile('11_{}_{}.shp'.format(j, i), geom, 11)
+                    if dirty_area(geom) < 725000000000:
+                        # Write a new Shapefile
+                        write_shapefile('{}.shp'.format(uuid4()), geom, 11)
+                    else:
+                        # Recurse as the polygon is still too big
+                        divide_poly(geom)
 
         elif clipped.type is 'Polygon':
-            # Write a new Shapefile
-            write_shapefile('11_{}_0.shp'.format(j), clipped, 11)
+            if dirty_area(clipped) < 725000000000:
+                # Write a new Shapefile
+                write_shapefile('{}.shp'.format(uuid4()), clipped, 11)
+            else:
+                # Recurse as the polygon is still too big
+                divide_poly(clipped)
 
         else:
             print('Odd geometry:', clipped.type)
