@@ -24,6 +24,9 @@ def write_shapefile(out_filename, geometry, zone_id):
     across files being written
     '''
 
+    outp = ('/Users/stuart/CardiffProject/climate_zones/'
+            'singlepart_files_split/')
+
     # Define a polygon feature geometry with one attribute
     schema = {
         'geometry': 'Polygon',
@@ -31,7 +34,7 @@ def write_shapefile(out_filename, geometry, zone_id):
     }
 
     # write the shapefile using the schema
-    with fiona.open(out_filename, 'w', 'ESRI Shapefile', schema) as c:
+    with fiona.open(outp + out_filename, 'w', 'ESRI Shapefile', schema) as c:
         c.write({
             'geometry': mapping(geometry),
             'properties': {'cz': zone_id.split('_')[0]},
@@ -150,5 +153,24 @@ def divide_poly(poly, cz_id):
         else:
             print('Odd geometry:', clipped.type)
 
-path = '/Users/stuart/CardiffProject/climate_zones/singlepart_files/11_13.shp'
-divide_poly(load_poly(path), get_cz_id(path))
+
+def runner():
+    to_split = ['25_102', '7_94', '4_27', '25_44', '21_10', '3_87', '6_88',
+                '2_78', '11_30', '3_91', '7_36', '5_60', '6_11', '6_38', '4_6',
+                '11_13', '21_20', '14_69', '5_47', '14_197', '4_17', '8_74',
+                '2_87', '1_100', '3_85', '14_174', '3_64', '14_89', '4_14',
+                '14_61', '17_50', '3_98', '3_76', '6_78', '4_30', '5_13',
+                '7_18', '1_74', '8_48', '11_10', '5_1', '11_12', '3_48',
+                '4_20']
+
+    for cz in to_split:
+        path = ('/Users/stuart/CardiffProject/climate_zones'
+                '/singlepart_files_split/{}.shp').format(cz)
+
+        divide_poly(load_poly(path), get_cz_id(path))
+
+        # Delete original files
+        path = path[:-3]
+        to_delete = ['shp', 'dbf', 'shx', 'cpg']
+        for d in to_delete:
+            os.remove(path + 'd')
