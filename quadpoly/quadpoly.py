@@ -7,18 +7,20 @@ import fiona
 path = '/Users/stuart/CardiffProject/climate_zones/singlepart_files/11_13.shp'
 
 
-def divide_poly(path):
+def load_poly(path):
+    with fiona.open(path) as shp:
+        geoms = (shp[0]['geometry']['coordinates'])
+
+    return Polygon(geoms[0], holes=geoms[1:])
+
+
+def divide_poly(poly):
 
     # Define a polygon feature geometry with one attribute
     schema = {
         'geometry': 'Polygon',
         'properties': {'cz': 'int'},
     }
-
-    with fiona.open(path) as shp:
-        geoms = (shp[0]['geometry']['coordinates'])
-
-    poly = Polygon(geoms[0], holes=geoms[1:])
 
     # Convert the poly to equal area coords so we can get its approx area
     # this is an approximation, and will not equal the utm areas for the
@@ -95,4 +97,4 @@ def divide_poly(path):
         else:
             print('Odd geometry:', clipped.type)
 
-divide_poly(path)
+divide_poly(load_poly(path))
