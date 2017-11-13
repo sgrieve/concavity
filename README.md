@@ -8,17 +8,17 @@ The original project plan for this project can be found in `ProjectPlan/` in bot
 
 ## Directory Structure
 
-This section provides an overview of the files contained within this repository.
+This section provides an overview of the files contained within this repository and how to use them.
 
 #### `climate_zones/`
 
-The files within this directory are generated using some of the preprocessing scripts. The initial input data, taken from [this paper](koppen link) is provided as a `geotiff`. This raster is split into a series shapefiles, which are subdivided until each climate sub zone is small enough to be processed in a sane amount of time and with a sane amount of memory. The final files which should be used are contained within `singlepart_files_split/`, the other folders contain intermediate data which is preserved for debugging purposes.
+The files within this directory are generated using some of the preprocessing scripts. The initial input data, taken from [this paper](Koppen link) is provided as a `geotiff`. This raster is split into a series shapefiles, which are subdivided until each climate sub zone is small enough to be processed in a sane amount of time and with a sane amount of memory. The final files which should be used are contained within `singlepart_files_split/`, the other folders contain intermediate data which is preserved for debugging purposes.
 
 #### `preprocessing/`
 
 `srtm_filenames.lst` is the list of every SRTM 30 tile stored on the OpenTopography servers.
 
-`reclassify.py` is used to reclassify the input koppen climate zone raster to merge the similar climate zones to produce a final file which can be used for the rest of the preprocessing. This resultant final file is stored in `climate_zones/`.
+`reclassify.py` is used to reclassify the input Koppen climate zone raster to merge the similar climate zones to produce a final file which can be used for the rest of the preprocessing. This resultant final file is stored in `climate_zones/`.
 
 `multi_to_single.py` Following the conversion of the reclassified climate zone raster to a polygon shapefile using QGIS, this script is used to break each multipart polygon geometry into a singlepart polygon geometry, needed so that we can create a single tile for each contiguous climate sub zone without having to nest attribute queries within GDAL commands.
 
@@ -77,11 +77,11 @@ This directory contains the original matlab analysis code (`Concavity.m`) used t
 
 ## Workflow
 
-This section outlines the steps required to go from the koppen climate zone raster to the final processed files, via a series of preprocessing steps, an automated processing workflow and some postprocessing.
+This section outlines the steps required to go from the Koppen climate zone raster to the final processed files, via a series of preprocessing steps, an automated processing workflow and some postprocessing.
 
 ## Naming Conventions
 
-The koppen climate zones are described by letter codes in the original paper. We have merged some of the similar zones to allow us to identify more general trends in the data to emerge.
+The Koppen climate zones are described by letter codes in the original paper. We have merged some of the similar zones to allow us to identify more general trends in the data to emerge.
 
 This table contains the mappings between the letter codes used in the paper and our numerical codes.
 
