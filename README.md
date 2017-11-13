@@ -42,6 +42,19 @@ Which will write the average concavity statistics to the screen and save a figur
 
 #### `preprocessing/`
 
+`srtm_filenames.lst` is the list of every SRTM 30 tile stored on the OpenTopography servers.
+
+`reclassify.py` is used to reclassify the input koppen climate zone raster to merge the similar climate zones to produce a final file which can be used for the rest of the preprocessing. This resultant final file is stored in `climate_zones/`.
+
+`multi_to_single.py` Following the conversion of the reclassified climate zone raster to a polygon shapefile using QGIS, this script is used to break each multipart polygon geometry into a singlepart polygon geometry, needed so that we can create a single tile for each contiguous climate sub zone without having to nest attribute queries within GDAL commands.
+
+`quadpoly.py` Script to use a quadtree-like algorithm to divide large climate sub zones into smaller chunks, to cut down on processing time on Legion. This script is hard coded with a list of the climate sub zones which need to be split and an approximate maximum size of polygon to be processed in one step. This second value will need tweaked based on the compute power available.
+
+`parse_srtm_filenames.py` This script processes the list of SRTM tiles into a json file, `srtm_coords.json`, which stores the corner coordinates of each SRTM tile, keyed with the filename of the tile on the OpenTopography server.
+
+`get_bbox.py` This script identifies the bounding box coordinates, the UTM zone and if the bottom left corner of the bounding box is in the Northern or Southern hemisphere for each shapefile generated using `quadpoly.py`. The results are stored in `../processing/bboxes.json`.
+
+`get_dl_list.py` The final preprocessing script, this loads the bounding box of each shapefile from `../processing/bboxes.json` and calculates all of the SRTM tiles which intersect this bounding box. From this intersection a json containing a list of download urls, keyed by the climate sub zone name is written to `../processing/download_links.json`.
 
 #### `processing/`
 
