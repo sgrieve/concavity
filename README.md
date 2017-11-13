@@ -14,32 +14,6 @@ This section provides an overview of the files contained within this repository.
 
 The files within this directory are generated using some of the preprocessing scripts. The initial input data, taken from [this paper](koppen link) is provided as a `geotiff`. This raster is split into a series shapefiles, which are subdivided until each climate sub zone is small enough to be processed in a sane amount of time and with a sane amount of memory. The final files which should be used are contained within `singlepart_files_split/`, the other folders contain intermediate data which is preserved for debugging purposes.
 
-#### `LSD_code/`
-
-This project lightly modifies the LSDTopoTools `chi_mapping_tool` to generate the required output data from the clipped SRTM tiles. This driver can be used with any recent LSDTopoTools distribution. If you need guidance on getting started with LSDTopoTools, see [this user guide](LSD book link).
-
-
-#### `matlab_code/`
-
-This directory contains the original matlab analysis code (`Concavity.m`) used to calculate and plot river concavity data alongside the example input data (`Af_distance.txt` and `Af_elevation.txt`) provided at the start of the project.
-
-`python_port.py` is a straight port of the matlab code to python, which runs on the same input data and produces identical outputs.
-
-`data_to_matlab_fmt.py` is a script to take output data from the LSD code and reformat it into the structure needed to be loaded by the original matlab code or its python port. It is only used for debugging.
-
-#### `postprocessing/`
-
-Following the execution of the LSD code, `export_rivers.py` is used to identify the longest river in each drainage basin and export it to its own `csv` file.
-
-`concavity.py` is the new visualisation script for these output river files. It is an optimized port of the original `concavity.m` script described above and can be used at the command line as follows:
-
-```
-$ python concavity.py <output_filename> <list of river filenames>
-```
-
-Which will write the average concavity statistics to the screen and save a figure, named using the supplied output filename,  containing boxplots of all of the input rivers.
-
-
 #### `preprocessing/`
 
 `srtm_filenames.lst` is the list of every SRTM 30 tile stored on the OpenTopography servers.
@@ -75,6 +49,31 @@ $3 - north or south
 `legion_script.sh` Example legion script used to deploy an array job composed of multiple instances of `runner.sh`.
 
 `SRTM.driver` parameter file for the LSD code. Write path will need to be configured for the user who is running the code, and the other parameters are documented in the [LSDTopoTools User Guide](LSDTopoTools book).
+
+#### `LSD_code/`
+
+This project lightly modifies the LSDTopoTools `chi_mapping_tool` to generate the required output data from the clipped SRTM tiles. This driver can be used with any recent LSDTopoTools distribution. If you need guidance on getting started with LSDTopoTools, see [this user guide](LSD book link).
+
+#### `postprocessing/`
+
+Following the execution of the LSD code, `export_rivers.py` is used to identify the longest river in each drainage basin and export it to its own `csv` file.
+
+`concavity.py` is the new visualisation script for these output river files. It is an optimized port of the original `concavity.m` script described above and can be used at the command line as follows:
+
+```
+$ python concavity.py <output_filename> <list of river filenames>
+```
+
+Which will write the average concavity statistics to the screen and save a figure, named using the supplied output filename,  containing boxplots of all of the input rivers.
+
+#### `matlab_code/`
+
+This directory contains the original matlab analysis code (`Concavity.m`) used to calculate and plot river concavity data alongside the example input data (`Af_distance.txt` and `Af_elevation.txt`) provided at the start of the project.
+
+`python_port.py` is a straight port of the matlab code to python, which runs on the same input data and produces identical outputs.
+
+`data_to_matlab_fmt.py` is a script to take output data from the LSD code and reformat it into the structure needed to be loaded by the original matlab code or its python port. It is only used for debugging.
+
 
 ## Workflow
 
