@@ -46,7 +46,7 @@ $3 - north or south
 
 `build_array_params.py` Use this script to generate a file containing the matrix of parameters needed to deploy an array job. Takes 2 input arguments, the minimum and maximum number of SRTM tiles to be included in the job. This allows multiple array jobs to be created with different memory requirements.
 
-`legion_script.sh` Example legion script used to deploy an array job composed of multiple instances of `runner.sh`.
+`legion_array_job.sh` Example legion script used to deploy an array job composed of multiple instances of `runner.sh`.
 
 `SRTM.driver` parameter file for the LSD code. Write path will need to be configured for the user who is running the code, and the other parameters are documented in the [LSDTopoTools User Guide](LSDTopoTools book).
 
@@ -78,6 +78,36 @@ This directory contains the original matlab analysis code (`Concavity.m`) used t
 ## Workflow
 
 This section outlines the steps required to go from the Koppen climate zone raster to the final processed files, via a series of preprocessing steps, an automated processing workflow and some postprocessing.
+
+
+#### 1. Climate Zone Processing
+
+1. Download [Koppen Climate Zone dataset](koppen link)
+1. `reclassify.py`
+1. Use QGIS to convert reclassified raster to polygon
+1. `multi_to_single.py`
+1. `quadpoly.py`
+
+#### 2. SRTM Tile Processing
+
+1. Download SRTM filenames from OpenTopography
+1. `parse_srtm_filenames.py`
+1. `get_bbox.py`
+1. `get_dl_list.py`
+
+#### 3. HPC Processing
+
+For a single job:
+1. `legion_script.sh`
+
+For an array job:
+1. `build_array_params.py`
+2. `legion_array_job.sh`
+
+#### 4. Result Visualisation
+
+1. `concavity.py`
+
 
 ## Naming Conventions
 
