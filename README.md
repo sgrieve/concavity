@@ -12,7 +12,7 @@ This section provides an overview of the files contained within this repository 
 
 #### `climate_zones/`
 
-The files within this directory are generated using some of the preprocessing scripts. The initial input data, taken from [this paper](Koppen link) is provided as a `geotiff`. This raster is split into a series shapefiles, which are subdivided until each climate sub zone is small enough to be processed in a sane amount of time and with a sane amount of memory. The final files which should be used are contained within `singlepart_files_split/`, the other folders contain intermediate data which is preserved for debugging purposes.
+The files within this directory are generated using some of the preprocessing scripts. The initial input data, taken from [this paper](https://www.hydrol-earth-syst-sci.net/11/1633/2007/hess-11-1633-2007.html) is provided as a `geotiff`. This raster is split into a series shapefiles, which are subdivided until each climate sub zone is small enough to be processed in a sane amount of time and with a sane amount of memory. The final files which should be used are contained within `singlepart_files_split/`, the other folders contain intermediate data which is preserved for debugging purposes.
 
 #### `preprocessing/`
 
@@ -48,11 +48,11 @@ $3 - north or south
 
 `legion_array_job.sh` Example legion script used to deploy an array job composed of multiple instances of `runner.sh`.
 
-`SRTM.driver` parameter file for the LSD code. Write path will need to be configured for the user who is running the code, and the other parameters are documented in the [LSDTopoTools User Guide](LSDTopoTools book).
+`SRTM.driver` parameter file for the LSD code. Write path will need to be configured for the user who is running the code, and the other parameters are documented in the [LSDTopoTools User Guide](http://lsdtopotools.github.io/LSDTT_book/).
 
 #### `LSD_code/`
 
-This project lightly modifies the LSDTopoTools `chi_mapping_tool` to generate the required output data from the clipped SRTM tiles. This driver can be used with any recent LSDTopoTools distribution. If you need guidance on getting started with LSDTopoTools, see [this user guide](LSD book link).
+This project lightly modifies the LSDTopoTools `chi_mapping_tool` to generate the required output data from the clipped SRTM tiles. This driver can be used with any recent LSDTopoTools distribution. If you need guidance on getting started with LSDTopoTools, see [this user guide](http://lsdtopotools.github.io/LSDTT_book/).
 
 #### `postprocessing/`
 
@@ -82,7 +82,7 @@ This section outlines the steps required to go from the Koppen climate zone rast
 
 #### 1. Climate Zone Processing
 
-1. Download [Koppen Climate Zone dataset](koppen link)
+1. Download [Koppen Climate Zone dataset](https://www.hydrol-earth-syst-sci.net/11/1633/2007/hess-11-1633-2007.html)
 1. `reclassify.py`
 1. Use QGIS to convert reclassified raster to polygon
 1. `multi_to_single.py`
