@@ -12,17 +12,17 @@ module load gdal
 #$ -S /bin/bash
 
 # 2. Request ten minutes of wallclock time (format hours:minutes:seconds).
-#$ -l h_rt=4:00:0
+#$ -l h_rt=1:00:0
 
 # 3. Request 1 gigabyte of RAM
-#$ -l mem=128G
+#$ -l mem=64G
 
 # 4. Request 15 gigabyte of TMPDIR space (default is 10 GB)
 #$ -l tmpfs=100G
 
 # 5. Set up the job array.  In this instance we have requested 1000 tasks
 # numbered 1 to 1000.
-#$ -t 0-1021
+#$ -t 0-20
 
 # 5. Set the name of the job.
 #$ -N small_array_srtm
