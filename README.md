@@ -116,7 +116,7 @@ The Koppen climate zones are described by letter codes in the original paper. We
 This table contains the mappings between the letter codes used in the paper and our numerical codes.
 
 |Letter Code| Classification | Code (original range)|
-| --- | --- |
+| --- | --- |---|
 | Af | Tropical-Rainforest | 1 |
 | Am | Tropical-Monsoon | 2 |
 | Aw | Tropical-Savannah | 3 |
