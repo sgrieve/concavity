@@ -27,7 +27,7 @@ to_process = [x for x in counts if x[1] > lower and x[1] <= upper]
 # Write the required params for each job into a file in the format:
 # job_id shapefile_name(no extension) utm_zone north/south no-of-tiles
 with open('array_params_{}_{}.txt'.format(lower, upper), 'w') as f:
-    for i, a in enumerate(to_process):
+    for i, a in enumerate(to_process, start=1):
         utm = bboxes[a[0]]['utm_zone']
         f.write('{} {} {} {} {}\n'.format(str(i).zfill(4), a[0][:-4], utm[0],
                                           utm[1], a[1]))
