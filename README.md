@@ -115,7 +115,21 @@ The Koppen climate zones are described by letter codes in the original paper. We
 
 This table contains the mappings between the letter codes used in the paper and our numerical codes.
 
-**table here**
+|Letter Code| Classification | Code (original range)|
+| --- | --- |
+| Af | Tropical-Rainforest | 1 |
+| Am | Tropical-Monsoon | 2 |
+| Aw | Tropical-Savannah | 3 |
+| BWh | Arid-Desert-Hot | 4 |
+| BWk | Arid-Desert-Cold | 5 |
+| BSh | Arid-Steppe-Hot | 6 |
+| BSk | Arid-Steppe-Cold | 7 |
+| Cs | Temperate-Dry summer | 8 (8, 9)|
+| Cw | Temperate-Dry winter | 11 (11, 12, 13) |
+| Cf | Temperate-Without dry season | 14 (14, 15, 16) |
+| Ds | Cold-Dry summer | 17 (17, 18, 19, 20)|
+| Dw | Cold-Dry Winter | 21 (21, 22, 23, 24) |
+| Df | Cold-Without dry season | 25 (25, 26, 27, 28) |
 
 As the climate zones are not contiguous, we need to be able to split each climate zone into a series of individual polygons, to achieve this, a sub zone ID is added to each climate zone so that the 5th polygon of zone 4 would be referred to as `4_5`. Not that no information is contained within these sub zone IDs, we cannot assume any spatial relationship between sub zones based on their numerical value.
 
