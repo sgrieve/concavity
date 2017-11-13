@@ -58,11 +58,27 @@ Which will write the average concavity statistics to the screen and save a figur
 
 #### `processing/`
 
+`get_urls.py` Simple command line script to return a list of the download urls for a given input climate sub zone filename.
 
+`runner.sh` Main script which handles the download, merging, clipping and reprojection of the SRTM tiles, runs the file through the LSD code and postprocesses the outputs. Takes three input arguments:
+
+```
+$1 - shapefile name without .shp
+$2 - utm zone
+$3 - north or south
+```
+
+`legion_script.sh` Example legion script used to deploy a single instance of `runner.sh`.
+
+`build_array_params.py` Use this script to generate a file containing the matrix of parameters needed to deploy an array job. Takes 2 input arguments, the minimum and maximum number of SRTM tiles to be included in the job. This allows multiple array jobs to be created with different memory requirements.
+
+`legion_script.sh` Example legion script used to deploy an array job composed of multiple instances of `runner.sh`.
+
+`SRTM.driver` parameter file for the LSD code. Write path will need to be configured for the user who is running the code, and the other parameters are documented in the [LSDTopoTools User Guide](LSDTopoTools book).
 
 ## Workflow
 
-This section works through the steps required to go from the koppen climate zone raster to the final processed files, via a series of preprocessing steps, an automated processing workflow and some postprocessing.
+This section outlines the steps required to go from the koppen climate zone raster to the final processed files, via a series of preprocessing steps, an automated processing workflow and some postprocessing.
 
 ## Naming Conventions
 
