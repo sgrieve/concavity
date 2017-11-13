@@ -22,7 +22,7 @@ module load gdal
 
 # 5. Set up the job array.  In this instance we have requested 1000 tasks
 # numbered 1 to 1000.
-#$ -t 0-20
+#$ -t 1-20
 
 # 5. Set the name of the job.
 #$ -N small_array_srtm
@@ -38,7 +38,7 @@ cd $TMPDIR
 
 # 8. Parse parameter file to get variables.
 number=$SGE_TASK_ID
-paramfile=/home/ccearie/concavity/processing/array_params_0_30.txt
+paramfile=/home/ccearie/concavity/processing/array_params_0_1.txt
 
 index=`sed -n ${number}p $paramfile | awk '{print $1}'`
 variable1=`sed -n ${number}p $paramfile | awk '{print $2}'`
