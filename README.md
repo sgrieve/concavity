@@ -131,6 +131,6 @@ This table contains the mappings between the letter codes used in the paper and 
 | Dw | Cold-Dry Winter | 21 (21, 22, 23, 24) |
 | Df | Cold-Without dry season | 25 (25, 26, 27, 28) |
 
-As the climate zones are not contiguous, we need to be able to split each climate zone into a series of individual polygons, to achieve this, a sub zone ID is added to each climate zone so that the 5th polygon of zone 4 would be referred to as `4_5`. Not that no information is contained within these sub zone IDs, we cannot assume any spatial relationship between sub zones based on their numerical value.
+As the climate zones are not contiguous, we need to be able to split each climate zone into a series of individual polygons, to achieve this, a sub zone ID is added to each climate zone so that the 5th polygon of zone 4 would be referred to as `4_5`. Note that no information is contained within these sub zone IDs, we cannot assume any spatial relationship between sub zones based on their numerical value.
 
 In some cases the sub zones are still too big to be processed efficiently. These are further divided using a quadtree-like algorithm. In order to ensure files are never overwritten whilst running this recursive algorithm, the output subsets of a given climate sub zone are given an additional unique id: `4_5_a6a60415-78a8-4ed7-8f74-f9fbfceb09f5`. Again, these additional IDs confer no other information and serve solely to ensure the uniqueness of each climate sub zone.
