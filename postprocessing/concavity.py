@@ -14,7 +14,7 @@ output_filename = sys.argv[1]
 # any non zero number of files
 n = len(sys.argv[2:])
 
-for filename in sys.argv[1:]:
+for filename in sys.argv[2:]:
 
     data = np.genfromtxt(filename, delimiter=',')
 
