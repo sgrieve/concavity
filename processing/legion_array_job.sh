@@ -22,7 +22,7 @@ module load gdal
 
 # 5. Set up the job array.  In this instance we have requested 1000 tasks
 # numbered 1 to 1000.
-#$ -t 1-20
+#$ -t 1-174
 
 # 5. Set the name of the job.
 #$ -N small_array_srtm
