@@ -25,7 +25,7 @@ module load gdal
 #$ -t 1-174
 
 # 5. Set the name of the job.
-#$ -N small_array_srtm
+#$ -N srtm_1
 
 # 6. Set the working directory to somewhere in your scratch space.  This is
 # a necessary step with the upgraded software stack as compute nodes cannot
