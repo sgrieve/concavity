@@ -16,7 +16,7 @@ python /home/ccearie/concavity/processing/get_urls.py $1.shp | xargs -n 1 -P 8 w
 gdalbuildvrt input.vrt *.hgt
 
 # Clip the merged raster using the corresponding shapefile
-gdalwarp -multi -wo 'NUM_THREADS=val/ALL_CPUS' -srcnodata -32768 -dstnodata -9999 -cutline /home/ccearie/concavity/climate_zones/singlepart_files/$1.shp -crop_to_cutline -of ENVI input.vrt tmp.bil
+gdalwarp -multi -wo 'NUM_THREADS=val/ALL_CPUS' -srcnodata -32768 -dstnodata -9999 -cutline /home/ccearie/concavity/climate_zones/singlepart_files_split/$1.shp -crop_to_cutline -of ENVI input.vrt tmp.bil
 
 # Reproject the clipped raster to utm and save as a floating point file
 gdalwarp -t_srs '+proj=utm +zone='$2' +datum=WGS84 +'$3'' -of ENVI -ot Float32 tmp.bil $1.bil
