@@ -7,6 +7,14 @@ import fiona
 import os
 
 
+def uid():
+    '''
+    Wrapper around uuid4() to return a unique string with underscores instead
+    of dashes.
+    '''
+    return str(uuid4()).replace('-', '_')
+
+
 def load_poly(path):
     '''
     From a path to a shapefile, load the geometry and return it as a shapely
@@ -134,7 +142,7 @@ def divide_poly(poly, cz_id):
                     if bbox_area(geom) < 725000000000:
                         # Write a new Shapefile if we have not made a sliver
                         if dirty_area(geom) > 1000000000:
-                            write_shapefile('{}_{}.shp'.format(cz_id, uuid4()),
+                            write_shapefile('{}_{}.shp'.format(cz_id, uid()),
                                             geom, cz_id)
                     else:
                         # Recurse as the polygon is still too big
@@ -144,7 +152,7 @@ def divide_poly(poly, cz_id):
             if bbox_area(clipped) < 725000000000:
                 # Write a new Shapefile if we have not made a sliver
                 if dirty_area(clipped) > 1000000000:
-                    write_shapefile('{}_{}.shp'.format(cz_id, uuid4()),
+                    write_shapefile('{}_{}.shp'.format(cz_id, uid()),
                                     clipped, cz_id)
             else:
                 # Recurse as the polygon is still too big
