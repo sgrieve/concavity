@@ -1,0 +1,14 @@
+srtm_seg_rr.e4198621.1
+srtm_seg_rr.e4198621.11
+srtm_seg_rr.e4198621.13
+srtm_seg_rr.e4198621.12
+srtm_seg_rr.e4198621.2
+srtm_seg_rr.e4198621.15
+srtm_seg_rr.e4198621.14
+srtm_seg_rr.e4198621.3
+srtm_seg_rr.e4198621.4
+srtm_seg_rr.e4198621.5
+srtm_seg_rr.e4198621.6
+srtm_seg_rr.e4198621.7
+srtm_seg_rr.e4198621.8
+srtm_seg_rr.e4198621.9
