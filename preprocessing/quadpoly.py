@@ -33,7 +33,7 @@ def write_shapefile(out_filename, geometry, zone_id):
     '''
 
     outp = ('/Users/stuart/CardiffProject/climate_zones/'
-            'singlepart_files_split/')
+            'singlepart_files_split_rerun/')
 
     # Define a polygon feature geometry with one attribute
     schema = {
@@ -91,7 +91,7 @@ def divide_poly(poly, cz_id):
     '''
 
     # Early exit if the polygon is small enough already
-    if bbox_area(poly) < 725000000000:
+    if bbox_area(poly) < 493000000000:
         return
 
     # (minx, miny, maxx, maxy)
@@ -139,7 +139,7 @@ def divide_poly(poly, cz_id):
             for i, geom in enumerate(clipped):
                 if geom.type is 'Polygon':
 
-                    if bbox_area(geom) < 725000000000:
+                    if bbox_area(geom) < 493000000000:
                         # Write a new Shapefile if we have not made a sliver
                         if dirty_area(geom) > 1000000000:
                             write_shapefile('{}_{}.shp'.format(cz_id, uid()),
@@ -149,7 +149,7 @@ def divide_poly(poly, cz_id):
                         divide_poly(geom, cz_id)
 
         elif clipped.type is 'Polygon':
-            if bbox_area(clipped) < 725000000000:
+            if bbox_area(clipped) < 493000000000:
                 # Write a new Shapefile if we have not made a sliver
                 if dirty_area(clipped) > 1000000000:
                     write_shapefile('{}_{}.shp'.format(cz_id, uid()),
@@ -163,18 +163,23 @@ def divide_poly(poly, cz_id):
 
 
 def runner():
-    to_split = ['25_102', '7_94', '4_27', '25_44', '21_10', '3_87', '6_88',
-                '2_78', '11_30', '3_91', '7_36', '5_60', '6_11', '6_38', '4_6',
-                '11_13', '21_20', '14_69', '5_47', '14_197', '4_17', '8_74',
-                '2_87', '1_100', '3_85', '14_174', '3_64', '14_89', '4_14',
-                '14_61', '17_50', '3_98', '3_76', '6_78', '4_30', '5_13',
-                '7_18', '1_74', '8_48', '11_10', '5_1', '11_12', '3_48',
-                '4_20']
+    to_split = ['17_26', '21_9', '25_102_ada76b9b_0625_410d_bde6_824263252ff5',
+                '25_102_1e28bc13_e3fe_4a62_8737_636e3312528e',
+                '25_44_2aec770e_d59c_43bb_b1a6_6bb27f90f398',
+                '25_102_d018e04f_a790_4963_9cfc_3062fe4c8e18',
+                '25_102_7518de3a_25c4_4ca3_b736_5ed0e4c79e4e',
+                '25_102_5c70f84a_7cc0_49af_a018_c2bcdc9dfcdc',
+                '25_102_aa5fd30e_9601_4eeb_abc2_70339496f513',
+                '25_102_9eec1bf9_f725_4417_a4e6_9c3bb9970660',
+                '25_102_071b7fc2_3a23_4ed0_9a5d_054b3295a75f',
+                '25_102_1a23c5b2_7ba1_444f_86ba_63d63dd8f376',
+                '25_102_53c5c657_0e1a_4257_bf63_da1f9646c214',
+                '25_102_0612589f_1410_46df_aa7c_93a5847f3d53']
 
     for i, cz in enumerate(to_split, start=1):
         print(i, 'of', len(to_split), 'processed')
         path = ('/Users/stuart/CardiffProject/climate_zones'
-                '/singlepart_files_split/{}.shp').format(cz)
+                '/singlepart_files_split_rerun/{}.shp').format(cz)
 
         divide_poly(load_poly(path), get_cz_id(path))
 

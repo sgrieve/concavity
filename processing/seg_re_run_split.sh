@@ -46,4 +46,4 @@ variable2=`sed -n ${number}p $paramfile | awk '{print $3}'`
 variable3=`sed -n ${number}p $paramfile | awk '{print $4}'`
 
 # 8. Run the application.
-sh /home/ccearie/concavity/processing/runner.sh $variable1 $variable2 $variable3
+sh /home/ccearie/concavity/processing/rerunner.sh $variable1 $variable2 $variable3
