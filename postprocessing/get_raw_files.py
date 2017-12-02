@@ -1,5 +1,3 @@
-# This script ignores the mchi files for now.
-
 import os
 
 files = []
