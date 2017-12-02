@@ -6,8 +6,7 @@ from collections import Counter
 # Processing the input filename to get the climate zone number and sub number
 input_file = sys.argv[1]
 filename = os.path.basename(input_file)
-split_name = filename.split('_')
-sub_zone = '{}_{}'.format(split_name[0], split_name[1])
+sub_zone = filename.split('MChiSegmented')[0][:-1]
 
 with open(input_file, 'r') as csvfile:
     reader = csv.reader(csvfile, delimiter=',')
@@ -19,7 +18,7 @@ with open(input_file, 'r') as csvfile:
     for r in reader:
         basin_ids.append(r[12])
 
-    # Set will give us a uniqe set of basin ids with no duplicates
+    # Set will give us a unique set of basin ids with no duplicates
     basin_ids = set(basin_ids)
 
     # Create a dictionary keyed with basin ids and the values are empty lists
