@@ -15,8 +15,7 @@ def koppen_number_to_string(filename):
 
     split_sub_zone = filename.split('_')
     koppen_zone = koppen[split_sub_zone[0]]
-    return ''.join([koppen_zone, '_'] + split_sub_zone[1:])
-
+    return koppen_zone + '_' + '_'.join(split_sub_zone[1:])
 
 # Processing the input filename to get the climate zone number and sub number
 input_file = sys.argv[1]
@@ -69,6 +68,6 @@ for basin_key in basins:
                 o.write(','.join(data) + '\n')
 
 # Rename the MChiSegmented file to a more descriptive name
-new_input_name = input_file.replace('MChiSegmented', '_RawBasins')
+new_input_name = input_file.replace('MChiSegmented', 'RawBasins')
 new_input_name = koppen_number_to_string(new_input_name)
 os.rename(input_file, new_input_name)
