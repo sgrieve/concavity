@@ -3,10 +3,28 @@ import os
 import sys
 from collections import Counter
 
+
+def koppen_number_to_string(filename):
+    '''
+    Helper function to convert a filename with a numerical koppen code into
+    a string koppen code, using the dictionary below.
+    '''
+    koppen = {'1': 'Af', '2': 'Am', '3': 'Aw', '4': 'BWh', '5': 'BWk',
+              '6': 'BSh', '7': 'BSk', '8': 'Cs', '11': 'Cw', '14': 'Cf',
+              '17': 'Ds', '21': 'Dw', '25': 'Df'}
+
+    split_sub_zone = filename.split('_')
+    koppen_zone = koppen[split_sub_zone[0]]
+    return ''.join([koppen_zone, '_'] + split_sub_zone[1:])
+
+
 # Processing the input filename to get the climate zone number and sub number
 input_file = sys.argv[1]
 filename = os.path.basename(input_file)
 sub_zone = filename.split('MChiSegmented')[0][:-1]
+
+# We want to convert back from the numerical climate zone codes to the strings
+sub_zone = koppen_number_to_string(sub_zone)
 
 with open(input_file, 'r') as csvfile:
     reader = csv.reader(csvfile, delimiter=',')
@@ -49,3 +67,8 @@ for basin_key in basins:
         for data in basins[basin_key][::-1]:
             if data[7] == main_stem:
                 o.write(','.join(data) + '\n')
+
+# Rename the MChiSegmented file to a more descriptive name
+new_input_name = input_file.replace('MChiSegmented', '_RawBasins')
+new_input_name = koppen_number_to_string(new_input_name)
+os.rename(input_file, new_input_name)
