@@ -18,14 +18,15 @@ def koppen_number_to_string(filename):
     return koppen_zone + '_' + '_'.join(split_sub_zone[1:])
 
 localpath = '/Users/stuart/CardiffProject/raw_files/{}/'.format(sys.argv[1])
+file_list = os.listdir(localpath)
 
-for i, input_file in enumerate(os.listdir(localpath), start=1):
+for i, input_file in enumerate(file_list, start=1):
     print(i, 'of', len(file_list))
 
     filename = os.path.basename(input_file)
     sub_zone = filename.split('MChiSegmented')[0][:-1]
 
-    # We want to convert back from the numerical climate zone codes to the strings
+    # We want to convert back from the numerical climate zone codes to strings
     sub_zone = koppen_number_to_string(sub_zone)
 
     with open(input_file, 'r') as csvfile:
@@ -41,20 +42,19 @@ for i, input_file in enumerate(os.listdir(localpath), start=1):
         # Set will give us a unique set of basin ids with no duplicates
         basin_ids = set(basin_ids)
 
-        # Create a dictionary keyed with basin ids and the values are empty lists
+        # Create a dict keyed with basin ids and the values are empty lists
         basins = {id: [] for id in basin_ids}
 
         # Jump back to the start of the file and skip the header
         csvfile.seek(0)
         next(reader)
 
-        # Select the data we want from the raw file so we have a list of rows of
-        # data for each basin.
+        # Select the data we want from the raw file so we have a list of rows
+        # of data for each basin.
         for row in reader:
             basins[row[12]].append((row[1:5] + row[6:9] + [row[11]]))
 
-
-    # get the main stem ID for each basin in the input file
+    # Get the main stem ID for each basin in the input file
     for basin_key in basins:
         sources = []
 
