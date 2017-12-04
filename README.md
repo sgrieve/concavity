@@ -14,6 +14,8 @@ This section provides an overview of the files contained within this repository 
 
 The files within this directory are generated using some of the preprocessing scripts. The initial input data, taken from [this paper](https://www.hydrol-earth-syst-sci.net/11/1633/2007/hess-11-1633-2007.html) is provided as a `geotiff`. This raster is split into a series shapefiles, which are subdivided until each climate sub zone is small enough to be processed in a sane amount of time and with a sane amount of memory. The final files which should be used are contained within `singlepart_files_split/`, the other folders contain intermediate data which is preserved for debugging purposes.
 
+An additional folder `singlepart_files_split_rerun/` contains polygons which had to be re-run after their initial processing hit memory or wallclock limits. Some of the polygons in this folder were split further using `quadpoly.py`.
+
 #### `preprocessing/`
 
 `srtm_filenames.lst` is the list of every SRTM 30 tile stored on the OpenTopography servers.
@@ -50,13 +52,15 @@ $3 - north or south
 
 `SRTM.driver` parameter file for the LSD code. Write path will need to be configured for the user who is running the code, and the other parameters are documented in the [LSDTopoTools User Guide](http://lsdtopotools.github.io/LSDTT_book/).
 
+There are numerous other shell scripts and parameter files in this folder, which are used to trigger re-runs of specific portions of the whole dataset, and will not be of any specific use to other users, except as a basis for their own debugging and rerunning.
+
 #### `LSD_code/`
 
 This project lightly modifies the LSDTopoTools `chi_mapping_tool` to generate the required output data from the clipped SRTM tiles. This driver can be used with any recent LSDTopoTools distribution. If you need guidance on getting started with LSDTopoTools, see [this user guide](http://lsdtopotools.github.io/LSDTT_book/).
 
 #### `postprocessing/`
 
-Following the execution of the LSD code, `export_rivers.py` is used to identify the longest river in each drainage basin and export it to its own `csv` file.
+Following the execution of the LSD code, `export_rivers.py` or `export_rivers_batch.py` is used to identify the longest river in each drainage basin and export it to its own `csv` file.
 
 `concavity.py` is the new visualisation script for these output river files. It is an optimized port of the original `concavity.m` script described above and can be used at the command line as follows:
 
@@ -64,7 +68,15 @@ Following the execution of the LSD code, `export_rivers.py` is used to identify 
 $ python concavity.py <output_filename> <list of river filenames>
 ```
 
-Which will write the average concavity statistics to the screen and save a figure, named using the supplied output filename,  containing boxplots of all of the input rivers.
+Which will write the average concavity statistics to the screen and save a figure, named using the supplied output filename, containing boxplots of all of the input rivers.
+
+`secondary_analysis.py` Can be run with two command line arguments, to generate secondary statistics, including NCI for a folder full of river data files:
+
+```
+$ python secondary_analysis.py <output_filename> <path to folder of river files>
+```
+
+This file will contain the NCI value for each river, alongside its relief, flow length and overall gradient.
 
 #### `matlab_code/`
 
@@ -106,7 +118,7 @@ For an array job:
 
 #### 4. Result Visualisation
 
-1. `concavity.py`
+1. `concavity.py` and/or `secondary_analysis.py`
 
 
 ## Naming Conventions
