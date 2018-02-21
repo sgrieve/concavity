@@ -2207,49 +2207,6 @@ int LSDJunctionNetwork::get_Receiver_of_Junction(int junction) const
   return ReceiverVector[junction];
 }
 
-//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=
-// Converting a junction list into a node list
-//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=
-vector<int> LSDJunctionNetwork::get_node_list_from_junction_list(vector<int> junction_list)
-{
-  int N_juncs = junction_list.size();
-  vector<int> node_list;
-  int this_junc;
-
-  for (int i = 0; i< N_juncs; i++)
-  {
-    this_junc = junction_list[i];
-    if (this_junc >= 0 && this_junc < int(JunctionVector.size()))
-    {
-      node_list.push_back(JunctionVector[this_junc]);
-    }
-  }
-
-  return node_list;
-}
-
-//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=
-// Converting a junction list into a node list
-//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=
-vector<int> LSDJunctionNetwork::get_node_list_of_penultimate_node_from_junction_list(vector<int> junction_list, LSDFlowInfo& FlowInfo)
-{
-  int N_juncs = junction_list.size();
-  vector<int> node_list;
-  int this_junc;
-
-  for (int i = 0; i< N_juncs; i++)
-  {
-    this_junc = junction_list[i];
-    if (this_junc >= 0 && this_junc < int(JunctionVector.size()))
-    {
-      int outlet_node = get_penultimate_node_from_stream_link(this_junc,FlowInfo);
-      node_list.push_back(outlet_node);
-    }
-  }
-
-  return node_list;
-}
-
 
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=
@@ -6651,98 +6608,6 @@ vector<int> LSDJunctionNetwork::Prune_Junctions_Largest(vector<int>& BaseLevelJu
 
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-// This prunes a list of baselevel junctions by selecting only those junctions
-// that are above or below (depending on the bool keep_junctions_below_threshold)
-// a threshold elevation
-//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-vector<int> LSDJunctionNetwork::Prune_Junctions_Threshold_Elevation(vector<int>& BaseLevelJunctions_Initial,
-                                              LSDFlowInfo& FlowInfo, LSDRaster& Elev,
-                                              float threshold_elevation, bool keep_junctions_below_threshold)
-{
-  vector<int> BL_Donor_junctions_pruned;
-  int N_BaseLevelJuncs = int(BaseLevelJunctions_Initial.size());
-
-  int row,col, current_node;
-  if(BaseLevelJunctions_Initial.size() <= 0)
-  {
-    cout << "I am afraid you have no junctions in your junction list. Exiting." << endl;
-    exit(0);
-  }
-
-
-  for(int i = 0; i < N_BaseLevelJuncs; ++i)
-  {
-    current_node = JunctionVector[BaseLevelJunctions_Initial[i]];
-    FlowInfo.retrieve_current_row_and_col(current_node,row,col);
-
-    float this_elevation = Elev.get_data_element(row,col);
-
-    cout << "Junction: " <<  BaseLevelJunctions_Initial[i] << " and elevation is: " << this_elevation << endl;
-
-    if (keep_junctions_below_threshold)
-    {
-      if (this_elevation <= threshold_elevation)
-      {
-        BL_Donor_junctions_pruned.push_back(BaseLevelJunctions_Initial[i]);
-      }
-    }
-    else
-    {
-      if (this_elevation >= threshold_elevation)
-      {
-        BL_Donor_junctions_pruned.push_back(BaseLevelJunctions_Initial[i]);
-      }
-    }
-  }
-
-  return BL_Donor_junctions_pruned;
-}
-//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-// This prunes a list of baselevel junctions by selecting only those junctions
-// that are within an elevation window
-//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-vector<int> LSDJunctionNetwork::Prune_Junctions_Elevation_Window(vector<int>& BaseLevelJunctions_Initial,
-                                              LSDFlowInfo& FlowInfo, LSDRaster& Elev,
-                                              float lower_threshold, float upper_threshold)
-{
-  vector<int> BL_Donor_junctions_pruned;
-  int N_BaseLevelJuncs = int(BaseLevelJunctions_Initial.size());
-
-  int row,col, current_node;
-  if(BaseLevelJunctions_Initial.size() <= 0)
-  {
-    cout << "I am afraid you have no junctions in your junction list. Exiting." << endl;
-    exit(0);
-  }
-
-
-  for(int i = 0; i < N_BaseLevelJuncs; ++i)
-  {
-    current_node = JunctionVector[BaseLevelJunctions_Initial[i]];
-    FlowInfo.retrieve_current_row_and_col(current_node,row,col);
-
-    float this_elevation = Elev.get_data_element(row,col);
-
-    cout << "Junction: " <<  BaseLevelJunctions_Initial[i] << " and elevation is: " << this_elevation;
-
-    if (this_elevation >= lower_threshold && this_elevation <= upper_threshold)
-    {
-      cout << " KEEPING this one." << endl;
-      BL_Donor_junctions_pruned.push_back(BaseLevelJunctions_Initial[i]);
-    }
-    else
-    {
-      cout << " NOT keeping that one. " << endl;
-    }
-  }
-
-  return BL_Donor_junctions_pruned;
-}
-//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // This function returns a vector of the contributing pixels from a list
 // of junctions
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -6807,28 +6672,6 @@ int LSDJunctionNetwork::get_receiver_junction_for_specified_coordinates(float X_
   return junction;
 }
 
-//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Get node index of nearest channel for specified coordinates
-// for lat long
-// FJC 20/11/17
-//
-//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-int LSDJunctionNetwork::get_junction_of_nearest_channel_from_lat_long(double latitude, double longitude, LSDFlowInfo& FlowInfo, LSDCoordinateConverterLLandUTM Converter)
-{
-  double this_Northing, this_Easting;
-  int UTM_zone;
-  bool is_North;
-  FlowInfo.get_UTM_information(UTM_zone, is_North);
-  int eId = 22;             // defines the ellipsiod. This is WGS
-  Converter.LLtoUTM_ForceZone(eId, latitude, longitude,
-                    this_Northing, this_Easting, UTM_zone);
-
-  // now get the nearest channel node
-  int this_junc = get_receiver_junction_for_specified_coordinates(this_Easting, this_Northing, FlowInfo);
-
-  return this_junc;
-
-}
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
