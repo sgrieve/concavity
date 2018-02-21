@@ -2,6 +2,9 @@
 # Batch script to run a serial job on Legion with the upgraded
 # software stack under SGE.
 
+# Use paid nodes designated to RSDG so we can skip waiting in the queue
+#$ -P RCSoftDev
+
 module load python
 module load perl
 module load hdf/5-1.8.15/gnu-4.9.2
