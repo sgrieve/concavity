@@ -1,15 +1,18 @@
 import rasterio
+import sys
 import os
 from glob import glob
 
-filenames = glob('../Results/Af/*iver*.csv')
+zone = sys.argv[1]
 
-source_path = 'processed_data/ai.tif'
+filenames = glob('/home/ccearie/Scratch/SRTM/{}/*iver*.csv'.format(zone))
+
+source_path = '/home/ccearie/Scratch/raster/ai.tif'
 
 with rasterio.open(source_path) as src:
 
     for i, f in enumerate(filenames):
-        
+
         points = []
         ai = []
 
@@ -25,7 +28,8 @@ with rasterio.open(source_path) as src:
             else:
                 ai.append('NaN')
 
-        outname = 'outputs/Af/' + os.path.basename(f)[:-4] + '_new.csv'
+        outname = '/home/ccearie/Scratch/SRTM_new/{}/{}.csv'.format(zone, os.path.basename(f)[:-4])
+
         with open(outname, 'w') as w:
             for q in range(len(ai)):
                 w.write('{},{}\n'.format(lines[q].strip(), ai[q]))
