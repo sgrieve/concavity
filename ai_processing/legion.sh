@@ -47,4 +47,4 @@ index=`sed -n ${number}p $paramfile | awk '{print $1}'`
 variable1=`sed -n ${number}p $paramfile | awk '{print $2}'`
 
 # 8. Run the application.
-python /home/ccearie/concavity/ai_processing/legion.py $variable1
+python /home/ccearie/concavity/ai_processing/get_ai.py $variable1
