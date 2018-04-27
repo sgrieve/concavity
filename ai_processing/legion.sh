@@ -5,11 +5,12 @@
 # Use paid nodes designated to RSDG so we can skip waiting in the queue
 #$ -P RCSoftDev
 
-module load python
-module load perl
-module load hdf/5-1.8.15/gnu-4.9.2
-module load netcdf/4.3.3.1/gnu-4.9.2
-module load gdal
+module purge
+module load gcc-libs/4.9.2
+module load compilers/gnu/4.9.2
+module load python2/recommended
+
+source $HOME/ppj/bin/activate
 
 # 1. Force bash as the executing shell.
 #$ -S /bin/bash
