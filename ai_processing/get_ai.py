@@ -6,7 +6,7 @@ from glob import glob
 zone = sys.argv[1]
 
 filenames = glob('/home/ccearie/Scratch/SRTM/{}/*iver*.csv'.format(zone))
-filenames = [filenames[0]]
+
 source_path = '/home/ccearie/Scratch/raster/ai.tif'
 
 with rasterio.open(source_path) as src:
