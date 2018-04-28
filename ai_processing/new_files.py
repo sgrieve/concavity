@@ -20,10 +20,10 @@ for d in data:
 
     ai_data = []
     for riv in river_data:
-        ai = riv.split(',')[-1]
+        ai = riv.split(',')[-1].strip()
         if ai != 'NaN':
             ai_data.append(float(ai))
-
+    print(river_name, ai_data)
     avg = np.mean(ai_data)
     std = np.std(ai_data)
     median = np.median(ai_data)
