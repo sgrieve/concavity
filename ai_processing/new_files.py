@@ -12,6 +12,8 @@ with open(filename, 'r') as f:
 
 output_data = []
 
+count = 0
+
 for d in data:
     river_name = d.split(',')[0]
 
@@ -23,19 +25,33 @@ for d in data:
         ai = riv.split(',')[-1].strip()
         if ai != 'NaN':
             ai_data.append(float(ai))
-    print(river_name, ai_data)
-    avg = np.mean(ai_data)
-    std = np.std(ai_data)
-    median = np.median(ai_data)
-    max = np.max(ai_data)
-    min = np.min(ai_data)
 
-    out = '{},{},{},{},{},{}\n'.format(d.strip(), avg, median, std, min, max)
+    if ai_data:
+        avg = np.mean(ai_data)
+        std = np.std(ai_data)
+        median = np.median(ai_data)
+        max = np.max(ai_data)
+        min = np.min(ai_data)
+        n = len(ai_data)
+    else:
+        count += 1
+        avg = 'NaN'
+        std = 'NaN'
+        median = 'NaN'
+        max = 'NaN'
+        min = 'NaN'
+        n = 0
+
+    out = '{},{},{},{},{},{},{}\n'.format(d.strip(), avg, median,
+                                          std, min, max, n)
     output_data.append(out)
 
 
 with open('/home/ccearie/Scratch/SRTM_new/{}.csv'.format(zone), 'w') as write:
-    write.write('RiverName,NCI,Relief,FlowLength,TotalSlope,Country,Continent,ai_mean,ai_median,ai_std,ai_min,ai_max\n')
+    write.write('RiverName,NCI,Relief,FlowLength,TotalSlope,Country,Continent,ai_mean,ai_median,ai_std,ai_min,ai_max,ai_n\n')
 
     for x in output_data:
         write.write(x)
+
+with open('/home/ccearie/Scratch/SRTM_new/{}_log.txt'.format(zone), 'w') as log:
+    log.write('{} has {} rivers with no AI values.'.format(zone, count))
