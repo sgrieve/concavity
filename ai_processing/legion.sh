@@ -26,7 +26,7 @@ source $HOME/ppj/bin/activate
 
 # 5. Set up the job array.  In this instance we have requested 1000 tasks
 # numbered 1 to 1000.
-#$ -t 1-12
+#$ -t 1-13
 
 # 5. Set the name of the job.
 #$ -N srtm_ai
@@ -48,4 +48,4 @@ index=`sed -n ${number}p $paramfile | awk '{print $1}'`
 variable1=`sed -n ${number}p $paramfile | awk '{print $2}'`
 
 # 8. Run the application.
-python /home/ccearie/concavity/ai_processing/get_ai.py $variable1
+python /home/ccearie/concavity/ai_processing/new_files.py $variable1
