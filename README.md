@@ -1,3 +1,6 @@
+[![DOI](https://zenodo.org/badge/105988052.svg)](https://zenodo.org/badge/latestdoi/105988052)
+
+
 # Global River Concavity
 
 This project aims to perform an analysis of global rivers using the SRTM 30 dataset and the LSDTopoTools package. The code presented here could be adapted to other projects which require the bulk downloading and processing of SRTM data based on polygon areas of interest.
